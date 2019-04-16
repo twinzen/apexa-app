@@ -1,0 +1,24 @@
+package com.twinzom.apexa.apis.model;
+
+import java.util.List;
+import java.util.Map;
+
+public class AccountHoldings {
+
+	private String acctNum;
+	
+	Map<String, List<Holding>> holdingGroup;
+
+	public String getAcctNum() {
+		return acctNum;
+	}
+
+	public void setAcctNum(String acctNum) {
+		this.acctNum = acctNum;
+	}
+
+
+	
+	
+	
+}

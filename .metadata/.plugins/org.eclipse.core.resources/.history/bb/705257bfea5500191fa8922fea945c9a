@@ -1,0 +1,53 @@
+package com.twinzom.apexa.apis.remoteclient;
+
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.twinzom.apexa.caleng.model.CalGroup;
+import com.twinzom.apexa.caleng.model.CalPosition;
+
+@Service
+public class CalEngClient {
+
+	@Autowired
+	RestTemplate restTemplate;
+	
+	@Value("${caleng.endpoint.base}")
+	private String endpointBase;
+	
+	@Value("${caleng.calculateHoldingSnapshots.uri}")
+	private String calculateHoldingSnapshotsUri;
+	
+	public CompletableFuture<String> callCalculateHoldingSnapshots (List<CalGroup> calGroups) throws JsonProcessingException {
+		
+		String calculateHoldingSnapshotsEndpoint = endpointBase + calculateHoldingSnapshotsUri + "?dates=2018-05-05";
+		ObjectMapper om = new ObjectMapper();
+		
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<String> entity = new HttpEntity<String>(om.writeValueAsString(calGroups), headers);
+		Map<String , Map<String, CalPosition>> response = restTemplate.postForObject(calculateHoldingSnapshotsEndpoint, entity, HashMap.class);
+			
+		
+		System.out.println(om.writerWithDefaultPrettyPrinter().writeValueAsString(response));
+		
+		return CompletableFuture.completedFuture("");
+	}
+	
+}

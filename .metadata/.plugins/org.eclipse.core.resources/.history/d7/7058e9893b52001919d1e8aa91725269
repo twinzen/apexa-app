@@ -1,0 +1,45 @@
+package com.twinzom.apexa.ce.model;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class CeTxn {
+
+	private String id;
+	
+	private String txnTypeCde;
+	
+	private Date trdDtTm;
+	
+	private BigDecimal prc;
+	
+	private String prcCcy;
+	
+	private BigDecimal qty;
+	
+	private BigDecimal pripLocl;
+	
+	private Date setlDtTm;
+	
+	private BigDecimal setlAmtSetl;
+	
+	private String setlCcy;
+	
+	private BigDecimal mktValLocl;
+	
+	private BigDecimal mktValAcct;
+	
+	private BigDecimal bkCostLocl;
+	
+	private BigDecimal bkCostAcct;
+	
+	private BigDecimal rglLocl;
+	
+	private BigDecimal rglAcct;
+	
+	public CeTxn () {}
+	
+	
+	
+	
+}

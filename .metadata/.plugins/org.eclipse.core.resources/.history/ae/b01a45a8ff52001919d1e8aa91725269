@@ -1,0 +1,9 @@
+package com.twinzom.apexa.apis.remoteclient;
+
+import org.springframework.web.client.RestTemplate;
+
+public class CalEngClient {
+
+	RestTemplate restTemplate;
+	
+}

@@ -1,0 +1,56 @@
+package com.twinzom.apexa.dao;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Component;
+
+import com.twinzom.apexa.dao.po.AccountPo;
+import com.twinzom.apexa.dao.rowmapper.AccountRowmapper;
+
+@Component
+public class SecurityDao {
+
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	private static final String GET_SEC_BY_SECIDS = "select * from sec_mast where secid in ( :secids )";
+
+	
+	public List<AccountPo> getSecsBySecids (List<Long> secids) {
+
+		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate.getDataSource());
+
+		if (acctNums == null || acctNums.size() <= 0) 
+			return null;
+		
+		SqlParameterSource namedParameters = new MapSqlParameterSource("acnos", acctNums);
+		
+		List<AccountPo> accounts = namedParameterJdbcTemplate.query(GET_ACCTS_BY_ACCT_NUMS,
+				namedParameters,
+				new AccountRowmapper());
+		
+		return accounts;
+	}
+	
+	public AccountPo getAcctByAccNum (String acctNum) {
+
+		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate.getDataSource());
+
+		SqlParameterSource namedParameters = new MapSqlParameterSource("acno", acctNum);
+		
+		List<AccountPo> accounts = namedParameterJdbcTemplate.query(GET_ACCTS_BY_ACCT_NUM,
+				namedParameters,
+				new AccountRowmapper());
+		
+		return accounts==null?null:accounts.get(0);
+	}
+	
+	
+	
+	
+}

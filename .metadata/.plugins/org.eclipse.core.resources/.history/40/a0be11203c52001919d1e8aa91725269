@@ -1,0 +1,33 @@
+package com.twinzom.apexa.ce.model;
+
+import java.math.BigDecimal;
+
+public class CalPosition {
+
+	private String securityId;
+	
+	private BigDecimal qty;
+	
+	private BigDecimal bkCostLocl;
+	
+	private BigDecimal bkCostAcct;
+	
+	private BigDecimal income;
+	
+	public CalPosition () {
+		
+		this.qty = BigDecimal.ZERO;
+		this.bkCostLocl = BigDecimal.ZERO;
+		this.bkCostAcct = BigDecimal.ZERO;
+		this.income = BigDecimal.ZERO;
+		
+	}
+	
+	public CalPosition (CalPosition p) {
+		
+		
+	}
+	
+	
+	
+}

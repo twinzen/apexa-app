@@ -1,0 +1,40 @@
+package com.twinzom.apexa.dao.po;
+
+public class SecurityPo {
+
+	private Long secid;
+	
+	private String secCde;
+	
+	private String name;
+	
+	private String ccy;
+	
+	private String riskLvl;
+	
+	private Double stdDv;
+	
+	private Double annRtrn;
+	
+	private Double sharpe;
+	
+	private Double navPrc;
+	
+	private Double bidPrc;
+	
+	private Double offPrc;
+	
+	private Double min52Prc;
+	
+	private Double max52Prc;
+	
+	private Date prcDt;
+	
+	private Date statcDt;
+	
+	private String statCde;
+	
+	private String fundHse;
+	
+	
+}

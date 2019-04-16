@@ -1,0 +1,6 @@
+CREATE TABLE rate_hist (
+	`ccy` varchar(3) DEFAULT NULL,
+	`rate` decimal(19,5) DEFAULT NULL, 
+	`rate_dt` datetime DEFAULT NULL,
+	PRIMARY KEY (`ccy`,`rate_dt`)
+) ENGINE=InnoDB ;

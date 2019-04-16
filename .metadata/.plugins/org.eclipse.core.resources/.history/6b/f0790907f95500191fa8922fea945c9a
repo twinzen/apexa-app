@@ -1,0 +1,37 @@
+package com.twinzom.apexa.caleng.model;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class CalSnapshot {
+
+	private String snapshotKey;
+	
+	private List<CalPosition> positions = new ArrayList<CalPosition>();
+	
+	public String getSnapshotKey() {
+		return snapshotKey;
+	}
+
+
+
+	public void setSnapshotKey(String snapshotKey) {
+		this.snapshotKey = snapshotKey;
+	}
+
+
+
+	public CalSnapshot () {}
+	
+	
+
+	public List<CalPosition> getPositions() {
+		return positions;
+	}
+
+	public void setPositions(List<CalPosition> positions) {
+		this.positions = positions;
+	}
+	
+}

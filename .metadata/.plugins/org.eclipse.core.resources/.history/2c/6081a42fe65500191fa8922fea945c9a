@@ -1,0 +1,28 @@
+package com.twinzom.apexa.apis.remoteclient;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.twinzom.apexa.caleng.model.CalGroup;
+
+@Service
+public class CalEngClient {
+
+	@Autowired
+	RestTemplate restTemplate;
+	
+	@Value("${caleng.endpoint.base}")
+	private String endpointBase;
+	
+	@Value("${caleng.calculateHoldingSnapshots.uri}")
+	private String calculateHoldingSnapshotsUri;
+	
+	public CompletableFuture<String> callCalculateHoldingSnapshots (List<CalGroup> calGroups) {
+		return CompletableFuture.completedFuture(str);
+	}
+	
+}

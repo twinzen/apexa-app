@@ -1,0 +1,158 @@
+package com.twinzom.apexa.apis.service;
+
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.twinzom.apexa.apis.model.AccountHoldings;
+import com.twinzom.apexa.apis.model.Holding;
+import com.twinzom.apexa.apis.remoteclient.CalEngClient;
+import com.twinzom.apexa.caleng.model.CalGroup;
+import com.twinzom.apexa.caleng.model.CalPosition;
+import com.twinzom.apexa.caleng.model.CalSnapshot;
+import com.twinzom.apexa.caleng.model.CalTxn;
+import com.twinzom.apexa.dao.AccountDao;
+import com.twinzom.apexa.dao.TransactionDao;
+import com.twinzom.apexa.dao.po.AccountPo;
+import com.twinzom.apexa.dao.po.TransactionPo;
+
+@Service
+public class GetHoldingsByAcctNumsService {
+
+	@Autowired
+	AccountDao accountDao;
+	
+	@Autowired
+	TransactionDao transactionDao;
+	
+	@Autowired
+	CalEngClient calEngClient;
+	
+	private static  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	
+	public AccountHoldings process (String acctNum, String datesStr) throws InterruptedException, ExecutionException {
+		
+		/**
+		 * convert external account id to internal account id
+		 */
+		//TODO: valid input account number list
+		
+		
+		AccountPo apo = accountDao.getAcctByAccNum(acctNum);
+		
+		// Format acid list
+		List<Long> acids = new ArrayList<Long>();
+		Map<Long, String> acidAcctNumMap = new HashMap<Long, String>();
+		acids.add(apo.getAcid());
+		acidAcctNumMap.put(apo.getAcid(), apo.getAcctNum());
+		
+		// Get transactions from DB
+		List<TransactionPo> tpos = transactionDao.getTxnsByAcctIds(acids);
+		
+		Map<Long, Map<Long, List<TransactionPo>>> groupByAcidSecidMap = 
+				tpos.stream().collect(Collectors.groupingBy(TransactionPo::getAcid, Collectors.groupingBy(TransactionPo::getSecid)));
+		
+		List<CompletableFuture<Map<String , List<CalSnapshot>>>> pages = new ArrayList<CompletableFuture<Map<String , List<CalSnapshot>>>>();
+		
+		for (Long acid : groupByAcidSecidMap.keySet()) {
+			Map<Long, List<TransactionPo>> groupBySecidMap = groupByAcidSecidMap.get(acid);
+			List<CalGroup> calGroups = formatCalculateHoldingSnapshotsBody(groupBySecidMap);
+			pages.add(calEngClient.callCalculateHoldingSnapshots(calGroups, datesStr));
+		}
+		
+		CompletableFuture.allOf(pages.toArray(new CompletableFuture[pages.size()])).join();
+		
+		Map<String , List<CalSnapshot>> snapshotsGroup = pages.get(0).get();
+		
+		Map<String, List<Holding>> holdingGroup = groupHoldingsByDate(snapshotsGroup);
+		
+		AccountHoldings acctHldgs = new AccountHoldings();
+		
+		acctHldgs.setAcctNum(acctNum);
+		
+		acctHldgs.setHoldingGroup(holdingGroup);
+		
+		return acctHldgs;
+	}
+	
+	private Map<String, List<Holding>> groupHoldingsByDate (Map<String , List<CalSnapshot>> snapshotsGroup) {
+		
+		Map<String, List<Holding>> groupByDate = new HashMap<String, List<Holding>>();
+		
+		for (String secidStr : snapshotsGroup.keySet()) {
+			
+			List<CalPosition> positions = snapshotsGroup.get(secidStr);
+			
+			for (String dateStr : positions.keySet()) {
+				
+				CalPosition p = positions.get(dateStr);
+				
+				List<Holding> holdings = groupByDate.get(dateStr);
+				if (holdings == null) {
+					holdings = new ArrayList<Holding>();
+					groupByDate.put(sdf.format(p.getValDate()), holdings);
+				}
+				Holding h = new Holding();
+				h.setSecid(Long.parseLong(secidStr));
+				h.setQty(p.getQty());
+				h.setBkCostLocl(p.getBkCostLocl());
+				h.setBkCostAcct(p.getBkCostAcct());
+				holdings.add(h);
+			}
+		}
+		
+		return groupByDate;
+		
+	}
+	
+	private List<CalGroup> formatCalculateHoldingSnapshotsBody (Map<Long, List<TransactionPo>> groupBySecidMap) {
+		
+		List<CalGroup> groups = new ArrayList<CalGroup>();
+		
+		for (Long secid: groupBySecidMap.keySet()) {
+			CalGroup g = new CalGroup();
+			g.setGroupId(String.valueOf(secid));
+			
+			List<CalTxn> calTxns = new ArrayList<CalTxn>();
+			g.setTxns(calTxns);
+			
+			List<TransactionPo> txns = groupBySecidMap.get(secid);
+			
+			for (TransactionPo t : txns) {
+				CalTxn calTxn = new CalTxn();
+				calTxn.setId(String.valueOf(t.getTxnid()));
+				calTxn.setTxnTypeCde(t.getTxnTypeCde());
+				calTxn.setTrdDtTm(t.getExeDtTm());
+				calTxn.setPrc(BigDecimal.valueOf(t.getExePrc()));
+				calTxn.setPrcCcy(t.getPrcCcy());
+				calTxn.setQty(BigDecimal.valueOf(t.getQty()));
+				calTxn.setPripLocl(BigDecimal.valueOf(t.getPripAmtLocl()));
+				calTxn.setSetlDtTm(t.getSetlDtTm());
+				calTxn.setSetlAmtSetl(BigDecimal.valueOf(t.getSetlAmtSetl()));
+				calTxn.setSetlCcy(t.getSetlCcy());
+				calTxn.setMktValLocl(BigDecimal.valueOf(t.getMktValLocl()));
+				calTxn.setMktValAcct(BigDecimal.valueOf(t.getMktValAcct()));
+				calTxn.setBkCostLocl(BigDecimal.valueOf(t.getBkCostLocl()));
+				calTxn.setBkCostAcct(BigDecimal.valueOf(t.getBkCostAcct()));
+				calTxns.add(calTxn);
+			}
+			groups.add(g);
+		}
+	
+		return groups;
+	}
+	
+	
+}

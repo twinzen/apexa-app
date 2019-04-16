@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.twinzom.apexa.apis.ApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.133 s - in com.twinzom.apexa.apis.ApplicationTests

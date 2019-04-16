@@ -1,0 +1,48 @@
+package com.twinzom.apexa.caleng.calculator;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import org.springframework.stereotype.Component;
+
+import com.twinzom.apexa.caleng.model.CalPosition;
+import com.twinzom.apexa.caleng.model.CalTxn;
+
+@Component
+public class WeightedAverageCalculator {
+
+	public void calculate (CalPosition p, CalTxn t) {
+		
+		BigDecimal newQty = BigDecimal.ZERO;
+		BigDecimal newBkCostLocl = BigDecimal.ZERO;
+		BigDecimal newBkCostAcct = BigDecimal.ZERO;
+		BigDecimal newIncome = BigDecimal.ZERO;
+		
+		switch(t.getTxnTypeCde()) {
+			case "SI":
+				
+				newQty = p.getQty().add(t.getQty());
+				newBkCostLocl = p.getBkCostLocl().add(t.getBkCostLocl());
+				newBkCostLocl = p.getBkCostLocl().add(t.getBkCostAcct());
+				break;
+			
+			case "SO":
+				
+				newQty = p.getQty().subtract(t.getQty());
+				newBkCostLocl = p.getBkCostLocl().multiply(newQty.divide(p.getQty(), 8, RoundingMode.HALF_EVEN));
+				newBkCostAcct = p.getBkCostAcct().multiply(newQty.divide(p.getQty(), 8, RoundingMode.HALF_EVEN));
+				
+			case "SOPL":
+				
+				newQty = p.getQty().subtract(t.getQty());
+				newBkCostLocl = p.getBkCostLocl().multiply(newQty.divide(p.getQty(), 8, RoundingMode.HALF_EVEN));
+				newBkCostAcct = p.getBkCostAcct().multiply(newQty.divide(p.getQty(), 8, RoundingMode.HALF_EVEN));
+				
+				BigDecimal rglLocl = t.getBkCostLocl().subtract(p.getBkCostLocl().multiply(t.getQty().divide(p.getQty(), 8, RoundingMode.HALF_EVEN)));
+				BigDecimal rglAcct = t.getBkCostLocl().subtract(p.getBkCostLocl().multiply(t.getQty().divide(p.getQty(), 8, RoundingMode.HALF_EVEN)));
+		
+		}
+		
+	}
+	
+}

@@ -1,0 +1,154 @@
+package com.twinzom.apexa.caleng.model;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+public class TransactionModel {
+
+	private Long txnId;
+	
+	private String txnTypeCde;
+	
+	private Date exeDtTm;
+	
+	private Date postDtTm;
+	
+	private BigDecimal exePrc;
+	
+	private String prcCcy;
+	
+	private BigDecimal qty;
+	
+	private BigDecimal pripAmtLocl;
+	
+	private Date setlDtTm;
+	
+	private String setlCcy;
+	
+	private BigDecimal setlAmtSetl;
+	
+	private BigDecimal setlLoclRate;
+	
+	private String longShtInd;
+	
+	private BigDecimal mktValLocl;
+	
+	private BigDecimal mktValAcct;
+	
+	private BigDecimal bkCostLocl;
+	
+	private BigDecimal bkCostAcct;
+	
+	private String extLotRef;
+	
+	public Long getTxnId() {
+		return txnId;
+	}
+	public void setTxnId(Long txnId) {
+		this.txnId = txnId;
+	}
+	public String getTxnTypeCde() {
+		return txnTypeCde;
+	}
+	public void setTxnTypeCde(String txnTypeCde) {
+		this.txnTypeCde = txnTypeCde;
+	}
+	public Date getExeDtTm() {
+		return exeDtTm;
+	}
+	public void setExeDtTm(Date exeDtTm) {
+		this.exeDtTm = exeDtTm;
+	}
+	public Date getPostDtTm() {
+		return postDtTm;
+	}
+	public void setPostDtTm(Date postDtTm) {
+		this.postDtTm = postDtTm;
+	}
+	public BigDecimal getExePrc() {
+		return exePrc;
+	}
+	public void setExePrc(BigDecimal exePrc) {
+		this.exePrc = exePrc;
+	}
+	public String getPrcCcy() {
+		return prcCcy;
+	}
+	public void setPrcCcy(String prcCcy) {
+		this.prcCcy = prcCcy;
+	}
+	public BigDecimal getQty() {
+		return qty;
+	}
+	public void setQty(BigDecimal qty) {
+		this.qty = qty;
+	}
+	public BigDecimal getPripAmtLocl() {
+		return pripAmtLocl;
+	}
+	public void setPripAmtLocl(BigDecimal pripAmtLocl) {
+		this.pripAmtLocl = pripAmtLocl;
+	}
+	public Date getSetlDtTm() {
+		return setlDtTm;
+	}
+	public void setSetlDtTm(Date setlDtTm) {
+		this.setlDtTm = setlDtTm;
+	}
+	public String getSetlCcy() {
+		return setlCcy;
+	}
+	public void setSetlCcy(String setlCcy) {
+		this.setlCcy = setlCcy;
+	}
+	public BigDecimal getSetlAmtSetl() {
+		return setlAmtSetl;
+	}
+	public void setSetlAmtSetl(BigDecimal setlAmtSetl) {
+		this.setlAmtSetl = setlAmtSetl;
+	}
+	public BigDecimal getSetlLoclRate() {
+		return setlLoclRate;
+	}
+	public void setSetlLoclRate(BigDecimal setlLoclRate) {
+		this.setlLoclRate = setlLoclRate;
+	}
+	public String getLongShtInd() {
+		return longShtInd;
+	}
+	public void setLongShtInd(String longShtInd) {
+		this.longShtInd = longShtInd;
+	}
+	public BigDecimal getMktValLocl() {
+		return mktValLocl;
+	}
+	public void setMktValLocl(BigDecimal mktValLocl) {
+		this.mktValLocl = mktValLocl;
+	}
+	public BigDecimal getMktValAcct() {
+		return mktValAcct;
+	}
+	public void setMktValAcct(BigDecimal mktValAcct) {
+		this.mktValAcct = mktValAcct;
+	}
+	public BigDecimal getBkCostLocl() {
+		return bkCostLocl;
+	}
+	public void setBkCostLocl(BigDecimal bkCostLocl) {
+		this.bkCostLocl = bkCostLocl;
+	}
+	public BigDecimal getBkCostAcct() {
+		return bkCostAcct;
+	}
+	public void setBkCostAcct(BigDecimal bkCostAcct) {
+		this.bkCostAcct = bkCostAcct;
+	}
+	public String getExtLotRef() {
+		return extLotRef;
+	}
+	public void setExtLotRef(String extLotRef) {
+		this.extLotRef = extLotRef;
+	}
+
+	
+}

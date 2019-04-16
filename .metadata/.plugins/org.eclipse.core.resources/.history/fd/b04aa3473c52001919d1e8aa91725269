@@ -1,0 +1,12 @@
+package com.twinzom.apexa.ce.model;
+
+import java.util.Date;
+import java.util.List;
+
+public class CalSnapshot {
+
+	private Date snapshotDate;
+	
+	private List<CalPosition> positions;
+	
+}

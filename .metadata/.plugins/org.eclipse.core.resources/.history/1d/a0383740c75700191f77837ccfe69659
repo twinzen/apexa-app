@@ -1,0 +1,8 @@
+CREATE TABLE sec_prc_hist (
+	`secid` int(10) unsigned NOT NULL,
+	`sec_cde` varchar(30) DEFAULT NULL,
+	`ccy` varchar(3) DEFAULT NULL,
+	`prc` decimal(19,5) DEFAULT NULL, 
+	`prc_dt` datetime DEFAULT NULL,
+	PRIMARY KEY (`secid`,`prc_dt`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

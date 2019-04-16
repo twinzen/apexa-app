@@ -1,0 +1,29 @@
+package com.twinzom.apexa.apis.model;
+
+public class Security {
+
+	private Long secid;
+	
+	private String code;
+	
+	private String name;
+	
+	private String ccy;
+	
+	private String riskLvl;
+	
+	private Double stdev;
+	
+	private Double annRtrn;
+	
+	private Double sharpe;
+	
+	private Double price;
+	
+	
+	
+	
+	
+	
+	
+}

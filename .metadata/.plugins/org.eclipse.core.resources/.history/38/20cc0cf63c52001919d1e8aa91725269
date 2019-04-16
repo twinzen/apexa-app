@@ -1,0 +1,55 @@
+package com.twinzom.apexa.ce.controller;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.twinzom.apexa.ce.model.CalGroup;
+import com.twinzom.apexa.ce.model.PositionSnapModel;
+import com.twinzom.apexa.ce.model.RglModel;
+import com.twinzom.apexa.ce.model.TransactionModel;
+import com.twinzom.apexa.ce.model.WeightedAverageReqModel;
+import com.twinzom.apexa.ce.model.WeightedAverageRespModel;
+
+@RestController
+public class CalEngController {
+	
+	enum mode {
+	       FULL, LATEST;
+	}
+	
+	@RequestMapping(value="/calculateHoldingSnapshots")
+    public Map<String, CalSnapshot> calculateHoldingSnapshots (
+    		@RequestParam(value="dates") String datesStr,
+    		@RequestBody List<CalGroup> calGroups) {
+		
+		
+		
+    }
+	
+	private PositionSnapModel calculateNextPositionSnap (
+			PositionSnapModel positionSnap,
+			TransactionModel transaction ) {
+		
+		PositionSnapModel nextPositionSnap = null;
+		
+		if (positionSnap == null) {
+			
+		} else {
+			
+		}
+		
+		return nextPositionSnap;
+		
+	}
+	
+	
+}

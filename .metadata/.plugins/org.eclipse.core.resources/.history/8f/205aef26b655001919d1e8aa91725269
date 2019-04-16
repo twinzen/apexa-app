@@ -1,0 +1,58 @@
+package com.twinzom.apexa.tools.common;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.text.ParseException;
+import java.util.Date;
+
+public class Util {
+
+
+	private static void setPreparedStatmentInt (PreparedStatement preparedStmt, int parameterIndex, Integer value) throws SQLException {
+		if (value != null) {
+			preparedStmt.setInt(parameterIndex, value);
+		} else {
+			preparedStmt.setNull(parameterIndex, Types.INTEGER);
+		}
+	}
+	
+	private static void setPreparedStatmentDouble (PreparedStatement preparedStmt, int parameterIndex, Double value) throws SQLException {
+		if (value != null) {
+			preparedStmt.setDouble(parameterIndex, value);
+		} else {
+			preparedStmt.setNull(parameterIndex, Types.DECIMAL);
+		}
+	}
+	
+	private static void setPreparedStatmentDate (PreparedStatement preparedStmt, int parameterIndex, Date value) throws SQLException {
+		if (value != null) {
+			preparedStmt.setDate(parameterIndex, new java.sql.Date(value.getTime()));
+		} else {
+			preparedStmt.setNull(parameterIndex, Types.DATE);
+		}
+	}
+	
+	private static Double parseToDouble(String str) {
+	    Double value = null;
+	    try {
+	        value = Double.parseDouble(str);
+	    }
+	    catch(NumberFormatException e) {
+	        // Do something
+	    }
+	    return value;
+	}
+	
+	private static Date parseToDate(String str) {
+	    Date value = null;
+	    try {
+	        value = sdf.parse(str);
+	    } catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return value;
+	}
+	
+}

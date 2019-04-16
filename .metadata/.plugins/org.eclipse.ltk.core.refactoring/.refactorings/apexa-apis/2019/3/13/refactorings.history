@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename method &apos;com.twinzom.apexa.apis.remoteclient.CalEngClient.calculateHoldingSnapshots(...)&apos; to &apos;callCalculateHoldingSnapshots&apos;&#x0A;- Original project: &apos;apexa-apis&apos;&#x0A;- Original element: &apos;com.twinzom.apexa.apis.remoteclient.CalEngClient.calculateHoldingSnapshots(...)&apos;&#x0A;- Renamed element: &apos;com.twinzom.apexa.apis.remoteclient.CalEngClient.callCalculateHoldingSnapshots(...)&apos;&#x0A;- Update references to refactored element" delegate="false" deprecate="false" description="Rename method &apos;calculateHoldingSnapshots&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.method" input="/src\/main\/java&lt;com.twinzom.apexa.apis.remoteclient{CalEngClient.java[CalEngClient~calculateHoldingSnapshots~QString;" name="callCalculateHoldingSnapshots" references="true" stamp="1553959742785" version="1.0"/>
+</session>

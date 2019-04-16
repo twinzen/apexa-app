@@ -1,0 +1,88 @@
+package com.twinzom.apexa.ce.controller;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.twinzom.apexa.ce.model.PositionSnapModel;
+import com.twinzom.apexa.ce.model.RglModel;
+import com.twinzom.apexa.ce.model.TransactionModel;
+import com.twinzom.apexa.ce.model.WeightedAverageReqModel;
+import com.twinzom.apexa.ce.model.WeightedAverageRespModel;
+
+@RestController
+public class CalEngController {
+	
+	enum mode {
+	       FULL, LATEST;
+	}
+	
+	@RequestMapping(value="/calculateHoldingSnapshots")
+    public WeightedAverageRespModel calculateHoldingSnapshots (
+    		@RequestParam(value="dates") String datesStr,
+    		@RequestBody WeightedAverageReqModel weightAverageReqModel) {
+		
+		/*
+		 * request model
+		 */
+		
+		// transactions input by caller
+		List<TransactionModel> transactions = weightAverageReqModel.getTransactions();
+		
+		/*
+		 * response model
+		 */
+		
+		// position snaps
+		List<PositionSnapModel> positionSnaps = new ArrayList<PositionSnapModel>();
+		
+		// RGLs since first purchase
+		List<RglModel> rglsSinceFirstPurchase = new ArrayList<RglModel>();
+		
+		// RGLs since re-purchase
+		List<RglModel> rglsSinceRepurchase = new ArrayList<RglModel>(); 
+
+		// first purchase date
+		Date firstPurchaseDate;
+		
+		// re-purchase date
+		Date repurchaseDate;
+		
+		PositionSnapModel positionSnap = null;
+		
+		PositionSnapModel nextPositionSnap = null;
+		
+		for (TransactionModel transaction : transactions) {
+			
+			nextPositionSnap = calculateNextPositionSnap(positionSnap, transaction);
+			
+		}
+		
+        return null;
+    }
+	
+	private PositionSnapModel calculateNextPositionSnap (
+			PositionSnapModel positionSnap,
+			TransactionModel transaction ) {
+		
+		PositionSnapModel nextPositionSnap = null;
+		
+		if (positionSnap == null) {
+			
+		} else {
+			
+		}
+		
+		return nextPositionSnap;
+		
+	}
+	
+	
+}

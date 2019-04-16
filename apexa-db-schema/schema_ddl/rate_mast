@@ -1,0 +1,6 @@
+CREATE TABLE rate_mast (
+	`ccy` varchar(3) NOT NULL,
+	`rate` decimal(19,5) DEFAULT NULL, 
+	`rate_dt` datetime DEFAULT NULL,
+	PRIMARY KEY (`ccy`)
+) ENGINE=InnoDB ;

@@ -1,0 +1,12 @@
+package com.twinzom.apexa.caleng.calculator;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class WeightedAverageCalculator {
+
+	public void calculate (CalPosition p, CalTxn t) {
+		
+	}
+	
+}

@@ -1,0 +1,5 @@
+package com.twinzom.apexa.tools.datageneration.historicaldata;
+
+public class PriceHistory {
+
+}

@@ -1,0 +1,22 @@
+package com.twinzom.apexa.caleng.calculator;
+
+import java.math.BigDecimal;
+
+import org.springframework.stereotype.Component;
+
+import com.twinzom.apexa.caleng.model.CalPosition;
+import com.twinzom.apexa.caleng.model.CalTxn;
+
+@Component
+public class WeightedAverageCalculator {
+
+	public void calculate (CalPosition p, CalTxn t) {
+		
+		BigDecimal newQty = BigDecimal.ZERO;
+		BigDecimal newBkCostLocl = BigDecimal.ZERO;
+		BigDecimal newBkCostAcct = BigDecimal.ZERO;
+		BigDecimal newIncome = BigDecimal.ZERO;
+		
+	}
+	
+}

@@ -1,0 +1,7 @@
+CREATE TABLE acct_mast (
+acid INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+acno VARCHAR (20),
+acct_mthd VARCHAR (3),
+strt_dt_tm DATETIME,
+term_dt_tm DATETIME
+) ENGINE = InnoDB ;

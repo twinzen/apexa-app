@@ -1,0 +1,60 @@
+package com.twinzom.apexa.dao;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Component;
+
+import com.twinzom.apexa.dao.po.AccountPo;
+import com.twinzom.apexa.dao.rowmapper.AccountRowmapper;
+
+@Component
+public class AccountDao {
+
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	private static final String GET_ACCTS_BY_ACCT_NUMS = "select * from acct_mast where acno in ( :acnos )";
+	private static final String GET_ACCTS_BY_ACCT_NUM = "select * from acct_mast where acno = :acno";
+
+	
+	public List<AccountPo> getAcctsByAcctNums (List<String> acctNums) {
+
+		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate.getDataSource());
+
+		if (acctNums == null || acctNums.size() <= 0) 
+			return null;
+		
+		SqlParameterSource namedParameters = new MapSqlParameterSource("acnos", acctNums);
+		
+		List<AccountPo> accounts = namedParameterJdbcTemplate.query(GET_ACCTS_BY_ACCT_NUMS,
+				namedParameters,
+				new AccountRowmapper());
+		
+		return accounts;
+	}
+	
+	public AccountPo accounts (String acctNum) {
+
+		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate.getDataSource());
+
+		SqlParameterSource namedParameters = new MapSqlParameterSource("acno", acctNum);
+		
+		List<AccountPo> accounts = namedParameterJdbcTemplate.query(GET_ACCTS_BY_ACCT_NUM,
+				namedParameters,
+				new AccountRowmapper());
+		
+		return accounts==null?null:accounts.get(0);
+	}
+	
+	
+	
+	
+}

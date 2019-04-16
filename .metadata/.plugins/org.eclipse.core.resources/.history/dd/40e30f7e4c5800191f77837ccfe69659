@@ -1,0 +1,57 @@
+package com.twinzom.apexa.apis.model;
+
+import java.util.Date;
+
+public class Transaction {
+
+	private Security security;
+	
+	private Long txnid;
+	
+	private String txnTypeCde;
+	
+	private String extTxnRef;
+	
+	private String extTxnTypeCde;
+	
+	private Long acid;
+	
+	private Long secid;
+	
+	private Date exeDtTm;
+	
+	private Date postDtTm;
+	
+	private Double exePrc;
+	
+	private String prcCcy;
+	
+	private Double qty;
+	
+	private Double pripAmtLocl;
+	
+	private Date setlDtTm;
+	
+	private String setlCcy;
+	
+	private Double setlAmtSetl;
+	
+	private Double setlLoclRate;
+	
+	private String mktCde;
+	
+	private String srcSysCde;
+	
+	private String cfmInd;
+	
+	private String longShtInd;
+	
+	private Double mktValLocl;
+	
+	private Double mktValAcct;
+	
+	private Double bkCostLocl;
+	
+	private Double bkCostAcct;
+	
+}

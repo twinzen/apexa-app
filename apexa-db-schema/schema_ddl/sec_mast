@@ -1,0 +1,20 @@
+CREATE TABLE `sec_mast` (
+  `secid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `secCde` varchar(30) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `ccy` varchar(3) DEFAULT NULL,
+  `risk_lvl` int(1) DEFAULT NULL, 
+  `devi` decimal(19,5) DEFAULT NULL, 
+  `ann_rtrn` decimal(19,5) DEFAULT NULL, 
+  `sharpe` decimal(19,5) DEFAULT NULL, 
+  `nav_prc` decimal(19,5) DEFAULT NULL, 
+  `bid_prc` decimal(19,5) DEFAULT NULL, 
+  `off_prc` decimal(19,5) DEFAULT NULL, 
+  `min_52_prc` decimal(19,5) DEFAULT NULL, 
+  `max_52_prc` decimal(19,5) DEFAULT NULL, 
+  `prc_dt` datetime DEFAULT NULL, 
+  `statc_dt` datetime DEFAULT NULL, 
+  `stat_cde` varchar(1) DEFAULT NULL,
+  `fund_hse` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`secid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

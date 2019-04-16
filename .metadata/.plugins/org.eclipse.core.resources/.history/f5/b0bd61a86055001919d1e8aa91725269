@@ -1,0 +1,27 @@
+package com.twinzom.apexa.tools.fundexpressfetching;
+
+public class Fund {
+
+	private String name;
+	
+	private Integer riskLvl;
+	
+	private Double deviation;
+	
+	private Double annualReturn;
+	
+	private Double sharpe;
+	
+	private Double navPrice;
+	
+	private Double bidPrice;
+	
+	private Double offerPrice;
+	
+	private Double min52Price;
+	
+	private Double max52Price;
+	
+	
+	
+}

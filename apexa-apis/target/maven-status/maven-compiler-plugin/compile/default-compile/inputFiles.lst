@@ -1,0 +1,10 @@
+/Users/twinsen/Projects/workspace-apexa/apexa-apis/src/main/java/com/twinzom/apexa/apis/model/Security.java
+/Users/twinsen/Projects/workspace-apexa/apexa-apis/src/main/java/com/twinzom/apexa/apis/controller/HoldingController.java
+/Users/twinsen/Projects/workspace-apexa/apexa-apis/src/main/java/com/twinzom/apexa/apis/model/AccountHoldings.java
+/Users/twinsen/Projects/workspace-apexa/apexa-apis/src/main/java/com/twinzom/apexa/apis/remoteclient/CalEngClient.java
+/Users/twinsen/Projects/workspace-apexa/apexa-apis/src/main/java/com/twinzom/apexa/apis/model/Holding.java
+/Users/twinsen/Projects/workspace-apexa/apexa-apis/src/main/java/com/twinzom/apexa/apis/service/GetTransactionsByAcctNumsService.java
+/Users/twinsen/Projects/workspace-apexa/apexa-apis/src/main/java/com/twinzom/apexa/apis/controller/TransactionController.java
+/Users/twinsen/Projects/workspace-apexa/apexa-apis/src/main/java/com/twinzom/apexa/apis/ApisApplication.java
+/Users/twinsen/Projects/workspace-apexa/apexa-apis/src/main/java/com/twinzom/apexa/apis/model/Transaction.java
+/Users/twinsen/Projects/workspace-apexa/apexa-apis/src/main/java/com/twinzom/apexa/apis/service/GetHoldingsByAcctNumsService.java

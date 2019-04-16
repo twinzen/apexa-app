@@ -1,0 +1,12 @@
+package com.twinzom.apexa.tools.datageneration.ratehistory;
+
+import java.util.Date;
+
+public class RateHistory {
+
+	private String Ccy;
+	
+	private Double rate;
+	
+	private Date rateDt;
+}

@@ -1,0 +1,23 @@
+package com.twinzom.apexa.caleng.model;
+
+import java.util.Date;
+import java.util.List;
+
+public class WeightedAverageRespModel {
+
+	private List<PositionSnapModel> positionSnaps;
+
+	private List<RglModel> rgls;
+	
+	private Date lastPurchaseDtTm;
+
+	public WeightedAverageRespModel(List<PositionSnapModel> positionSnaps,
+			List<RglModel> rgls) {
+		
+		this.positionSnaps = positionSnaps;
+		
+		this.rgls = rgls;
+		
+	}
+
+}

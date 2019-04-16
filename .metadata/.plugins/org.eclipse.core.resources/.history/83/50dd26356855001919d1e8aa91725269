@@ -1,0 +1,169 @@
+package com.twinzom.apexa.tools.fundexpressfetching;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class FundExpressFectcher {
+
+	static final String FUND_EXPRESS_URL = "http://www.fundexpress.hsbc.com.hk/HSBCSite/Overview.aspx?code=";
+	static final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+	static final ObjectMapper jsonMapper = new ObjectMapper();
+	
+	public static void main(String[] args) throws MalformedURLException, IOException, ClassNotFoundException, SQLException {
+		
+		// create a mysql database connection
+		String myUrl = "jdbc:mysql://apexa.cfyzdksiv9zy.eu-west-2.rds.amazonaws.com:3306/apexa";
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection dbConn = DriverManager.getConnection(myUrl, "apexa", "apexa.123");
+	    
+		Fund fund = fetch("U62719");
+		
+		System.out.println(jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(fund));
+		
+		persistFund(dbConn, fund);
+
+	}
+	
+	private static Fund fetch (String fundCode) throws MalformedURLException, IOException {
+		
+		Fund fund = new Fund();
+		
+		String html = null;
+		
+		URLConnection conn = new URL(FUND_EXPRESS_URL+fundCode).openConnection();
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		
+		String line;
+		
+		while ((line = br.readLine()) != null) {
+			html += line;
+		}
+		
+		br.close();
+		
+		Document doc = Jsoup.parse(html);
+		
+		String nameHtml = doc.getElementById("ctl00_ContentPlaceHolder1_lbFundNameText").html();
+		String riskLvlHtml = doc.getElementById("ctl00_ContentPlaceHolder1_lbRiskLevelText").html();
+		String deviationHtml = doc.getElementById("ctl00_ContentPlaceHolder1_lbStdDeviationText").html();
+		String annualReturnHtml = doc.getElementById("ctl00_ContentPlaceHolder1_lbReturn3YearText").html();
+		String sharpeHtml = doc.getElementById("ctl00_ContentPlaceHolder1_lbSharpeRatioText").html();
+		String navPriceHtml = doc.getElementById("ctl00_ContentPlaceHolder1_lbNAVText").html();
+		String bidPriceHtml = doc.getElementById("ctl00_ContentPlaceHolder1_lbBidText").html();
+		String offerPriceHtml = doc.getElementById("ctl00_ContentPlaceHolder1_lbOfferText").html();
+		String min52PriceHtml = doc.getElementById("ctl00_ContentPlaceHolder1_lbMinPriceText").html();
+		String max52PriceHtml = doc.getElementById("ctl00_ContentPlaceHolder1_lbMaxPriceText").html();
+		String ccyHtml = doc.getElementById("ctl00_ContentPlaceHolder1_lbFundCurrencyText").html();
+		String fundHouseHtml = doc.getElementById("ctl00_ContentPlaceHolder1_lbFundHouseText").html();
+		String priceDateHtml = doc.getElementById("ctl00_ContentPlaceHolder1_lbPriceDateText").html();
+		String statisticDateHtml = doc.getElementById("ctl00_ContentPlaceHolder1_lbRiskDateText").html();
+		
+		fund.setName(nameHtml);
+		fund.setRiskLvl(Integer.parseInt(riskLvlHtml));
+		fund.setDeviation(parseToDouble(deviationHtml.replace("%", "")));
+		fund.setAnnualReturn(parseToDouble(annualReturnHtml.replace("%", "")));
+		fund.setSharpe(parseToDouble(sharpeHtml));
+		fund.setNavPrice(parseToDouble(navPriceHtml));
+		fund.setBidPrice(parseToDouble(bidPriceHtml));
+		fund.setOfferPrice(parseToDouble(offerPriceHtml));
+		fund.setMin52Price(parseToDouble(min52PriceHtml));
+		fund.setMax52Price(parseToDouble(max52PriceHtml));
+		fund.setCcy(ccyHtml);
+		fund.setFundHouse(fundHouseHtml);
+		fund.setPriceDate(parseToDate(priceDateHtml.replace("(as of ","").replace(")","")));
+		fund.setStatisticDate(parseToDate(statisticDateHtml.replace("(as of ","").replace(")","")));
+		
+		return fund;
+		
+	}
+	
+	private static void persistFund (Connection dbConn, Fund fund) throws SQLException {
+		
+	      String query = " insert into sec_mast ("
+	      		+ "name, "
+	      		+ "ccy, "
+	      		+ "risk_lvl, "
+	      		+ "devi, "
+	      		+ "ann_rtrn, "
+	      		+ "sharpe, "
+	      		+ "nav_prc, "
+	      		+ "bid_prc, "
+	      		+ "off_prc, "
+	      		+ "min_52_prc, "
+	      		+ "max_52_prc, "
+	      		+ "prc_dt, "
+	      		+ "stat_dt, "
+	      		+ "fund_hse)"
+	        + " values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+	      // create the mysql insert preparedstatement
+	      PreparedStatement preparedStmt = dbConn.prepareStatement(query);
+	      preparedStmt.setString (1, fund.getName());
+	      preparedStmt.setString (2, fund.getCcy());
+	      preparedStmt.setInt   (3, fund.getRiskLvl());
+	      preparedStmt.setDouble(4, fund.getDeviation());
+	      preparedStmt.setDouble(5, fund.getAnnualReturn());
+	      preparedStmt.setDouble(6, fund.getSharpe());
+	      preparedStmt.setDouble(7, fund.getNavPrice());
+	      preparedStmt.setDouble(8, fund.getBidPrice());
+	      preparedStmt.setDouble(9, fund.getOfferPrice());
+	      preparedStmt.setDouble(10, fund.getMin52Price());
+	      preparedStmt.setDouble(11, fund.getMax52Price());
+	      preparedStmt.setDate(12, fund.getPriceDate()==null?null:new java.sql.Date(fund.getPriceDate().getTime()));
+	      preparedStmt.setDate(13, fund.getStatisticDate()==null?null:new java.sql.Date(fund.getStatisticDate().getTime()));
+	      preparedStmt.setString(14, fund.getFundHouse());
+
+	      preparedStmt.execute();
+		
+	}
+	
+	private static Double parseToDouble(String str) {
+	    Double value = null;
+	    try {
+	        value = Double.parseDouble(str);
+	    }
+	    catch(NumberFormatException e) {
+	        // Do something
+	    }
+	    return value;
+	}
+	
+	private static Date parseToDate(String str) {
+	    Date value = null;
+	    try {
+	        value = sdf.parse(str);
+	    } catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return value;
+	}
+	
+	private static List<String> getFundCodes () {
+		
+		List<String> fundCodes = new ArrayList<String>();
+		
+		return fundCodes;
+		
+	}
+
+}

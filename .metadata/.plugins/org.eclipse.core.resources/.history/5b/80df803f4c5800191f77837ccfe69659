@@ -1,0 +1,5 @@
+package com.twinzom.apexa.apis.model;
+
+public class Transaction {
+
+}
