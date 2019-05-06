@@ -1,42 +1,72 @@
 package com.twinzom.apexa.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
 
-import com.twinzom.apexa.dao.po.AccountPo;
-import com.twinzom.apexa.dao.po.TransactionPo;
-import com.twinzom.apexa.dao.rowmapper.AccountRowmapper;
-import com.twinzom.apexa.dao.rowmapper.TransactionRowmapper;
+import com.twinzom.apexa.dao.dto.TransactionDto;
+import com.twinzom.apexa.dao.jpo.TxnMastPo;
+import com.twinzom.apexa.dao.repository.TxnMastRepository;
 
 @Component
 public class TransactionDao {
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	@Autowired 
+	private TxnMastRepository txnMastRepository;
 	
-	private static final String GET_TXNS_BY_ACCT_IDS = "select * from txn_mast where acid in ( :acids )";
+	public List<TransactionDto> getTxnsByAcctIds (List<Long> acids) {
 
+		List<TxnMastPo> pos = txnMastRepository.findByAcid(acids);
+		
+		List<TransactionDto> dtos = new ArrayList<TransactionDto>();
+		
+		for (TxnMastPo po : pos) {
+			TransactionDto dto = convertPoToDTo(po);
+			dtos.add(dto);
+		}
+		
+		return dtos;
+	}
 	
-	public List<TransactionPo> getTxnsByAcctIds (List<Long> acids) {
-
-		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate.getDataSource());
-
-		if (acids == null || acids.size() <= 0) 
-			return null;
+	private TransactionDto convertPoToDTo (TxnMastPo po) {
 		
-		SqlParameterSource namedParameters = new MapSqlParameterSource("acids", acids);
+		TransactionDto dto = new TransactionDto();
 		
-		List<TransactionPo> transactions = namedParameterJdbcTemplate.query(GET_TXNS_BY_ACCT_IDS,
-				namedParameters,
-				new TransactionRowmapper());
+		dto.setTxnid(po.getTxnid());
+		dto.setTxnTypeCde(po.getTxnTypeCde());
+		dto.setExtTxnRef(po.getExtTxnRef());
+		dto.setExtTxnTypeCde(po.getExtTxnTypeCde());
+		dto.setAcid(po.getAcid());
+		dto.setSecid(po.getSecid());
+		dto.setTrdDtTm(po.getTrdDtTm());
+		dto.setTzdb(po.getTzdb());
+		dto.setPostDtTm(po.getPostDtTm());
+		dto.setExePrc(po.getExePrc());
+		dto.setPrcCcy(po.getPrcCcy());
+		dto.setQty(po.getQty());
+		dto.setPripAmtLocl(po.getPripAmtLocl());
+		dto.setSetlDtTm(po.getSetlDtTm());
+		dto.setSetlCcy(po.getSetlCcy());
+		dto.setSetlAmtSetl(po.getSetlAmtSetl());
+		dto.setSetlLoclRate(po.getSetlLoclRate());
+		dto.setMktCde(po.getMktCde());
+		dto.setSrcSysCde(po.getSrcSysCde());
+		dto.setTxnStat(po.getTxnStat());
+		dto.setLongShtInd(po.getLongShtInd());
+		dto.setMktValLocl(po.getMktValLocl());
+		dto.setMktValAcct(po.getMktValAcct());
+		dto.setMktValBase(po.getMktValBase());
+		dto.setBkCostLocl(po.getBkCostLocl());
+		dto.setBkCostAcct(po.getBkCostAcct());
+		dto.setBkCostBase(po.getBkCostBase());
+		dto.setExtLotRef(po.getExtLotRef());
+		dto.setNarrTxt(po.getNarrTxt());
+		dto.setEditRmkTxt(po.getEditRmkTxt());
+		dto.setEditStafId(po.getEditStafId());
 		
-		return transactions;
+		return dto;
 	}
 	
 }

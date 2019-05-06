@@ -1,60 +1,58 @@
 package com.twinzom.apexa.dao;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
 
-import com.twinzom.apexa.dao.po.AccountPo;
-import com.twinzom.apexa.dao.rowmapper.AccountRowmapper;
+import com.twinzom.apexa.dao.dto.AccountDto;
+import com.twinzom.apexa.dao.jpo.AcctMastPo;
+import com.twinzom.apexa.dao.repository.AcctMastRepository;
 
 @Component
 public class AccountDao {
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	@Autowired 
+	private AcctMastRepository acctMastRepository;
 	
-	private static final String GET_ACCTS_BY_ACCT_NUMS = "select * from acct_mast where acno in ( :acnos )";
-	private static final String GET_ACCTS_BY_ACCT_NUM = "select * from acct_mast where acno = :acno";
+	public List<AccountDto> getAcctsByExtCdePris (List<String> acctExtCdePris) {
 
-	
-	public List<AccountPo> getAcctsByAcctNums (List<String> acctNums) {
-
-		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate.getDataSource());
-
-		if (acctNums == null || acctNums.size() <= 0) 
-			return null;
+		List<AcctMastPo> pos = acctMastRepository.findByAcctExtCdePri(acctExtCdePris);
 		
-		SqlParameterSource namedParameters = new MapSqlParameterSource("acnos", acctNums);
+		List<AccountDto> dtos = new ArrayList<AccountDto>();
 		
-		List<AccountPo> accounts = namedParameterJdbcTemplate.query(GET_ACCTS_BY_ACCT_NUMS,
-				namedParameters,
-				new AccountRowmapper());
+		for (AcctMastPo po : pos) {
+			AccountDto dto = convertPoToDTo(po);
+			dtos.add(dto);
+		}
 		
-		return accounts;
+		return dtos;
 	}
 	
-	public AccountPo getAcctByAccNum (String acctNum) {
+	public AccountDto getAcctByExtCdePri (String acctExtCdePri) {
 
-		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate.getDataSource());
-
-		SqlParameterSource namedParameters = new MapSqlParameterSource("acno", acctNum);
+		AcctMastPo po = acctMastRepository.findByAcctExtCdePri(acctExtCdePri);
 		
-		List<AccountPo> accounts = namedParameterJdbcTemplate.query(GET_ACCTS_BY_ACCT_NUM,
-				namedParameters,
-				new AccountRowmapper());
-		
-		return accounts==null?null:accounts.get(0);
+		return convertPoToDTo(po);
 	}
 	
-	
-	
+	private AccountDto convertPoToDTo (AcctMastPo po) {
+		
+		AccountDto dto = new AccountDto();
+		
+		dto.setAcid(po.getAcid());
+		dto.setAcctExtCdePri(po.getAcctExtCdePri());
+		dto.setAcctName(po.getAcctName());
+		dto.setAcctMthd(po.getAcctMthd());
+		dto.setAcctCcy(po.getAcctCcy());
+		dto.setStrtDtTm(po.getStrtDtTm());
+		dto.setTermDtTm(po.getTermDtTm());
+		dto.setAcctStat(po.getAcctStat());
+		dto.setCrtDtTm(po.getCrtDtTm());
+		dto.setUpdtDtTm(po.getUpdtDtTm());
+		
+		return dto;
+	}
 	
 }
